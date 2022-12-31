@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { ActivityIndicator, Animated } from 'react-native';
-import { MovieCard } from '../../components/MovieCard';
-import { TopMovieCard } from '../../components/TopMovieCard';
-import api, { api_key } from '../../services/api';
-import { theme } from '../../styles/theme';
-import { getListMovies } from '../../utils/movies';
+import React, { useState, useEffect, useRef } from "react";
+import { ActivityIndicator, Animated } from "react-native";
+import { MovieCard } from "../../components/MovieCard";
+import { TopMovieCard } from "../../components/TopMovieCard";
+import api, { api_key } from "../../services/api";
+import { theme } from "../../styles/theme";
+import { getListMovies } from "../../utils/movies";
 
 import {
   Container,
@@ -13,7 +13,7 @@ import {
   MostMovies,
   ListMovies,
   Indicator,
-} from './styles';
+} from "./styles";
 
 export function Home() {
   const [movies, setMovies] = useState([]);
@@ -26,25 +26,28 @@ export function Home() {
 
     async function getMovies() {
       const [popularMovies, topRatedMovies] = await Promise.all([
-        api.get('/movie/popular', {
+        api.get("/movie/popular", {
           params: {
             api_key: api_key,
-            language: 'pt-BR',
+            language: "pt-BR",
             page: 1,
-          }
+          },
         }),
-        api.get('/movie/top_rated', {
+        api.get("/movie/top_rated", {
           params: {
             api_key: api_key,
-            language: 'pt-BR',
+            language: "pt-BR",
             page: 1,
-          }
-        })
-      ])
+          },
+        }),
+      ]);
 
       if (isActive) {
         const popularMoviesList = getListMovies(12, popularMovies.data.results);
-        const topRatedMoviesList = getListMovies(5, topRatedMovies.data.results);
+        const topRatedMoviesList = getListMovies(
+          5,
+          topRatedMovies.data.results
+        );
 
         setMovies(popularMoviesList);
         setTopRated(topRatedMoviesList);
@@ -57,30 +60,32 @@ export function Home() {
 
     return () => {
       isActive = false;
-    }
-  }, [])
+    };
+  }, []);
 
   if (loading) {
     return (
-      <Container style={{ justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator color={theme.colors.Purple} size={'large'} />
+      <Container style={{ justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator color={theme.colors.Purple} size={"large"} />
       </Container>
-    )
+    );
   }
 
   return (
     <Container>
-      <Title>Mov<Title style={{ color: theme.colors.Comment }}>Flix</Title></Title>
+      <Title>
+        Mov<Title style={{ color: theme.colors.Comment }}>Flix</Title>
+      </Title>
 
       <TitleCategoricals>Filmes mais avaliados</TitleCategoricals>
 
       <MostMovies>
         <ListMovies
           data={topRated}
-          keyExtractor={item => item.id}
+          keyExtractor={(item) => item.id}
           pagingEnabled
           onMomentumScrollEnd={(e) => {
-            setActiveIndex(parseInt(e.nativeEvent.contentOffset.y / 150))
+            setActiveIndex(parseInt(e.nativeEvent.contentOffset.y / 140));
           }}
           renderItem={({ item }) => <TopMovieCard data={item} />}
           showsVerticalScrollIndicator={false}
@@ -88,25 +93,36 @@ export function Home() {
 
         <ListMovies
           data={topRated}
-          keyExtractor={item => item.id}
+          keyExtractor={(item) => item.id}
           scrollEnabled={false}
-          style={{ position: 'absolute', right: '2%', top: '18%' }}
-          renderItem={({ index }) => <Indicator
-            color={activeIndex === index ? theme.colors.Foreground : theme.colors.Comment}
-          />
-          }
+          style={{ position: "absolute", right: "2%", top: "18%" }}
+          renderItem={({ index }) => (
+            <Indicator
+              color={
+                activeIndex === index
+                  ? theme.colors.Foreground
+                  : theme.colors.Comment
+              }
+            />
+          )}
         />
       </MostMovies>
 
-      <TitleCategoricals style={{ marginBottom: "5%" }} >Filmes mais populares</TitleCategoricals>
+      <TitleCategoricals style={{ marginBottom: "5%" }}>
+        Filmes mais populares
+      </TitleCategoricals>
 
       <ListMovies
         data={movies}
-        keyExtractor={item => item.id}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => <MovieCard data={item} />}
         numColumns={2}
         showsVerticalScrollIndicator={false}
-        columnWrapperStyle={{ marginHorizontal: "5%", marginBottom: "5%", justifyContent: 'space-between' }}
+        columnWrapperStyle={{
+          marginHorizontal: "5%",
+          marginBottom: "5%",
+          justifyContent: "space-between",
+        }}
       />
     </Container>
   );

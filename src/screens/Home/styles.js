@@ -41,3 +41,14 @@ export const Indicator = styled.View`
   margin-bottom: 7px;
   border-radius: 15px;
 `;
+
+export const Header = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 10px;
+`;
+
+export const ButtonFavoriteMovies = styled.TouchableOpacity`
+  position: absolute;
+  right: 5%;
+`;

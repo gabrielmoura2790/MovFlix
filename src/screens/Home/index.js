@@ -5,6 +5,8 @@ import { TopMovieCard } from "../../components/TopMovieCard";
 import api, { api_key } from "../../services/api";
 import { theme } from "../../styles/theme";
 import { getListMovies } from "../../utils/movies";
+import Feather from "@expo/vector-icons/Feather";
+import { useNavigation } from "@react-navigation/native";
 
 import {
   Container,
@@ -13,9 +15,13 @@ import {
   MostMovies,
   ListMovies,
   Indicator,
+  Header,
+  ButtonFavoriteMovies,
 } from "./styles";
 
 export function Home() {
+  const navigation = useNavigation();
+
   const [movies, setMovies] = useState([]);
   const [topRated, setTopRated] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -73,9 +79,17 @@ export function Home() {
 
   return (
     <Container>
-      <Title>
-        Mov<Title style={{ color: theme.colors.Comment }}>Flix</Title>
-      </Title>
+      <Header>
+        <Title>
+          Mov<Title style={{ color: theme.colors.Comment }}>Flix</Title>
+        </Title>
+
+        <ButtonFavoriteMovies
+          onPress={() => navigation.navigate("FavoriteMovies")}
+        >
+          <Feather name="film" size={32} color={theme.colors.Purple} />
+        </ButtonFavoriteMovies>
+      </Header>
 
       <TitleCategoricals>Filmes mais avaliados</TitleCategoricals>
 
